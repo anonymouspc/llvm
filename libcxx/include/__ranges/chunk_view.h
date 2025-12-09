@@ -53,7 +53,7 @@ _LIBCPP_BEGIN_NAMESPACE_STD
 namespace ranges {
 
 template <class _Integral>
-inline _LIBCPP_HIDE_FROM_ABI constexpr auto __div_ceil(_Integral __num, _Integral __denom) {
+_LIBCPP_HIDE_FROM_ABI constexpr auto __div_ceil(_Integral __num, _Integral __denom) {
   _Integral __r = __num / __denom;
   if (__num % __denom)
     ++__r;
@@ -62,7 +62,7 @@ inline _LIBCPP_HIDE_FROM_ABI constexpr auto __div_ceil(_Integral __num, _Integra
 
 template <view _View>
   requires input_range<_View>
-class _LIBCPP_ABI_LLVM18_NO_UNIQUE_ADDRESS chunk_view : public view_interface<chunk_view<_View>> {
+class chunk_view : public view_interface<chunk_view<_View>> {
   _LIBCPP_NO_UNIQUE_ADDRESS _View __base_;
   _LIBCPP_NO_UNIQUE_ADDRESS range_difference_t<_View> __n_;
   _LIBCPP_NO_UNIQUE_ADDRESS range_difference_t<_View> __remainder_;
@@ -249,7 +249,7 @@ public:
 
 template <view _View>
   requires forward_range<_View>
-class _LIBCPP_ABI_LLVM18_NO_UNIQUE_ADDRESS chunk_view<_View> : public view_interface<chunk_view<_View>> {
+class chunk_view<_View> : public view_interface<chunk_view<_View>> {
   _LIBCPP_NO_UNIQUE_ADDRESS _View __base_;
   _LIBCPP_NO_UNIQUE_ADDRESS range_difference_t<_View> __n_;
 
@@ -513,7 +513,7 @@ namespace views {
 namespace __chunk {
 struct __fn {
   template <viewable_range _Range>
-  [[nodiscard]] _LIBCPP_HIDE_FROM_ABI constexpr auto operator()(_Range&& __range, range_difference_t<_Range> __n) const
+  [[nodiscard]] _LIBCPP_HIDE_FROM_ABI static constexpr auto operator()(_Range&& __range, range_difference_t<_Range> __n)
       noexcept(noexcept(/**/ chunk_view(std::forward<_Range>(__range), std::forward<range_difference_t<_Range>>(__n))))
           -> decltype(/*--*/ chunk_view(std::forward<_Range>(__range), std::forward<range_difference_t<_Range>>(__n))) {
     return /*-------------*/ chunk_view(std::forward<_Range>(__range), std::forward<range_difference_t<_Range>>(__n));
