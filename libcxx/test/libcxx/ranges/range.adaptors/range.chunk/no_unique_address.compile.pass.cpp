@@ -44,7 +44,7 @@ using CV1 = std::ranges::chunk_view<input_view>;
 // [[no_unique_address]] range_difference_t<_View> __n_                        // offset: sizeof(std::ptrdiff_t)
 // [[no_unique_address]] range_difference_t<_View> __remainder_                // offset: sizeof(std::ptrdiff_t)
 // [[no_unique_address]] __non_propagating_cache<iterator_t<_View>> __current_ // offset: ?
-// TODO: hmmm I'm a new C++ learner (having been exposed to C++ 2 years) 
+// TODO: hmmm I'm a pure new C++ learner (having been exposed to C++ for 2 years)
 //       and I do not know about the memory layout here too...
 //       What is the layout like?
 
