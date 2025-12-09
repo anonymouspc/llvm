@@ -29,7 +29,7 @@ constexpr bool test() {
     assert(std::ranges::equal(*it, std::vector{1, 1, 1}));
     assert(std::ranges::equal(*++it, std::vector{2, 2, 2}));
     assert(std::ranges::equal(*++it, std::vector{3, 3})); // The last chunk has only 2 elements.
-    assert(++it == view.end());                         // Reaches end.
+    assert(++it == view.end());                           // Reaches end.
 
     view = full_vector | std::views::chunk(5);
     it   = view.begin();
