@@ -40,7 +40,7 @@ constexpr bool test() {
     auto it = input_chunked.begin();
     assert(std::ranges::equal(*++it, std::vector{3, 4}));
   }
-  
+
   // Test `constexpr void operator++(int);`
   {
     auto it = input_chunked.begin();
