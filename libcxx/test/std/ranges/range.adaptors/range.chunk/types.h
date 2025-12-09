@@ -23,10 +23,10 @@ struct input_span : std::span<T> {
     constexpr iterator()   = default;
     constexpr iterator(std::span<T>::iterator i) : std::span<T>::iterator(i) {}
     constexpr auto operator*() const { return std::span<T>::iterator::operator*(); }
-    friend constexpr auto operator+(iterator, auto) = delete;
-    friend constexpr auto operator+(auto, iterator) = delete;
-    friend constexpr auto operator-(iterator, auto) = delete;
-    friend constexpr auto operator-(auto, iterator) = delete;
+    friend constexpr auto operator+(iterator, std::span<T>::difference_type) = delete;
+    friend constexpr auto operator+(std::span<T>::difference_type, iterator) = delete;
+    friend constexpr auto operator-(iterator, std::span<T>::difference_type) = delete;
+    friend constexpr auto operator-(std::span<T>::difference_type, iterator) = delete;
     friend constexpr iterator& operator++(iterator& self) {
       ++static_cast<std::span<T>::iterator&>(self);
       return self;

@@ -10,30 +10,58 @@
 
 // <ranges>
 
-//   friend constexpr bool operator==(const iterator& x, const iterator& y)
-//   friend constexpr bool operator<(const iterator& x, const iterator& y)
-//     requires random_access_range<Base>;
-//   friend constexpr bool operator>(const iterator& x, const iterator& y)
-//     requires random_access_range<Base>;
-//   friend constexpr bool operator<=(const iterator& x, const iterator& y)
-//     requires random_access_range<Base>;
-//   friend constexpr bool operator>=(const iterator& x, const iterator& y)
-//     requires random_access_range<Base>;
-//   friend constexpr auto operator<=>(const iterator& x, const iterator& y)
-//     requires random_access_range<Base> &&
-//              three_way_comparable<iterator_t<Base>>;
+//   V models only input_range
+//     friend constexpr bool opreator==(const outer_iterator& x, default_sentinel_t);
+//     friend constexpr difference_type operator-(default_sentinel_t t, const outer_iterator& i)
+//       requires sized_sentinel_for<sentinel_t<V>, iterator_t<V>>;
+//     friend constexpr difference_type operator-(const outer_iterator& i, default_sentinel_t t)
+//       requires sized_sentinel_for<sentinel_t<V>, iterator_t<V>>;
+
+//   V models forward_range
+//     friend constexpr bool operator==(const iterator& x, const iterator& y)
+//     friend constexpr bool operator<(const iterator& x, const iterator& y)
+//       requires random_access_range<Base>;
+//     friend constexpr bool operator>(const iterator& x, const iterator& y)
+//       requires random_access_range<Base>;
+//     friend constexpr bool operator<=(const iterator& x, const iterator& y)
+//       requires random_access_range<Base>;
+//     friend constexpr bool operator>=(const iterator& x, const iterator& y)
+//       requires random_access_range<Base>;
+//     friend constexpr auto operator<=>(const iterator& x, const iterator& y)
+//       requires random_access_range<Base> &&
+//                three_way_comparable<iterator_t<Base>>;
 
 #include <algorithm>
 #include <cassert>
 #include <compare>
+#include <iterator>
 #include <ranges>
 #include <vector>
 
 #include "test_range.h"
+#include "../types.h"
 
 constexpr bool test() {
   std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
   auto chunked            = vector | std::views::chunk(3);
+  auto input_chunked      = input_span<int>(vector) | std::views::chunk(3);
+
+  // Test `friend constexpr bool opreator==(const outer_iterator& x, default_sentinel_t)`
+  {
+    auto it = input_chunked.begin();
+    std::ranges::advance(it, 4);
+    assert(it == std::default_sentinel);
+  }
+
+  // Test `friend constexpr difference_type operator-(default_sentinel_t t, const outer_iterator& i)`
+  {
+    assert(input_chunked.end() - input_chunked.begin() == 4);
+  }
+
+  // Test `friend constexpr difference_type operator-(const outer_iterator& i, default_sentinel_t)`
+  {
+    assert(input_chunked.begin() - input_chunked.end() == -4);
+  }
 
   // Test `friend constexpr bool operator==(const iterator& x, const iterator& y)`
   {
