@@ -28,25 +28,23 @@
 #include "types.h"
 
 constexpr bool test() {
-  std::vector vector      = {1, 2, 3, 4, 5, 6, 7, 8};
-  auto random_access_view = vector | std::views::all;
-  auto input_view = input_span<int>{vector.data(), 8};
+  std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8};
+  auto chunked             = vector | std::views::chunk(3);
+  auto const_chunked       = std::as_const(vector) | std::views::chunk(3);
+  auto input_chunked       = input_span<int>(vector.data(), 8) | std::views::chunk(3);
 
   // Test `chunk_view.end()` when V models only input_range
   {
-    auto chunked = input_view | std::views::chunk(3);
-    [[maybe_unused]] std::same_as<std::default_sentinel_t> auto it = chunked.end();
+    [[maybe_unused]] std::same_as<std::default_sentinel_t> auto it = input_chunked.end();
   }
 
   // Test `chunk_view.end()` when V models forward_range
   {
-    auto chunked                        = random_access_view | std::views::chunk(3);
     std::random_access_iterator auto it = chunked.end();
     assert(std::ranges::equal(*--it, std::vector{7, 8}));
     assert(std::ranges::equal(*--it, std::vector{4, 5, 6}));
     assert(std::ranges::equal(*--it, std::vector{1, 2, 3}));
     assert(it == chunked.begin());
-    auto const_chunked                        = std::as_const(random_access_view) | std::views::chunk(3);
     std::random_access_iterator auto const_it = const_chunked.end();
     assert(std::ranges::equal(*--const_it, std::vector{7, 8}));
     assert(std::ranges::equal(*--const_it, std::vector{4, 5, 6}));

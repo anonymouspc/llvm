@@ -23,21 +23,21 @@
 
 constexpr bool test() {
   std::array array = {1, 2, 3, 4, 5, 6, 7, 8};
-  auto view = array | std::views::all;
+  auto chunked = array | std::views::chunk(3);
+  auto const_chunked = std::as_const(array) | std::views::chunk(4);
 
   // Test `chunk_view.base()`
   {
-    auto chunked = view | std::views::chunk(3);
     std::same_as<std::array<int,8>::iterator> decltype(auto) begin = chunked.begin().base();
     std::same_as<std::array<int,8>::iterator> decltype(auto) end   = chunked.end().base();
-    assert(begin == view.begin());
-    assert(end == view.end());
+    assert(begin == array.begin());
+    assert(end == array.end());
 
-    auto const_chunked = std::as_const(view) | std::views::chunk(4);
-    std::same_as<std::array<int,8>::iterator> decltype(auto) const_begin = const_chunked.begin().base();
-    std::same_as<std::array<int,8>::iterator> decltype(auto) const_end   = const_chunked.end().base();
-    assert(const_begin == std::as_const(view).begin());
-    assert(const_end == std::as_const(view).end());
+
+    std::same_as<std::array<int,8>::const_iterator> decltype(auto) const_begin = const_chunked.begin().base();
+    std::same_as<std::array<int,8>::const_iterator> decltype(auto) const_end   = const_chunked.end().base();
+    assert(const_begin == std::as_const(array).begin());
+    assert(const_end == std::as_const(array).end());
   }
 
   return true;

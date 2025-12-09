@@ -11,6 +11,7 @@
 
 #include <iterator>
 #include <ranges>
+#include <span>
 #include <vector>
 
 // input_span

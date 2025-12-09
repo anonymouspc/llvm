@@ -27,33 +27,31 @@
 
 constexpr bool test() {
   std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8};
-  auto random_access_view = vector | std::views::all;
-  auto input_view         = input_span<int>{vector.data(), 8};
+  auto chunked             = vector | std::views::chunk(3);
+  auto const_chunked       = std::as_const(vector) | std::views::chunk(3);
+  auto input_chunked       = input_span<int>(vector.data(), 8) | std::views::chunk(3);
 
   // Test `chunk_view.begin()` when V models only input_range
   {
-    auto chunked = input_view | std::views::chunk(3);
-    auto it      = chunked.begin();
+    auto it      = input_chunked.begin();
     assert(std::ranges::equal(*it, std::vector{1, 2, 3}));
     assert(std::ranges::equal(*++it, std::vector{4, 5, 6}));
     assert(std::ranges::equal(*++it, std::vector{7, 8}));
-    assert(++it == chunked.end());
+    assert(++it == input_chunked.end());
   }
 
   // Test `chunk_view.begin()` when V models forward_range
   {
-    auto chunked = random_access_view | std::views::chunk(3);
-    auto it      = chunked.begin();
+    auto it = chunked.begin();
     assert(std::ranges::equal(*it, std::vector{1, 2, 3}));
     assert(std::ranges::equal(*++it, std::vector{4, 5, 6}));
     assert(std::ranges::equal(*++it, std::vector{7, 8}));
     assert(++it == chunked.end());
-    auto const_chunked = std::as_const(random_access_view) | std::views::chunk(3);
-    auto const_it      = const_chunked.begin();
+    auto const_it = const_chunked.begin();
     assert(std::ranges::equal(*const_it, std::vector{1, 2, 3}));
     assert(std::ranges::equal(*++const_it, std::vector{4, 5, 6}));
     assert(std::ranges::equal(*++const_it, std::vector{7, 8}));
-    assert(++it == const_chunked.end());
+    assert(++const_it == const_chunked.end());
   }
 
   return true;
