@@ -42,7 +42,7 @@ constexpr bool test() {
   // Test `constexpr inner_iterator outer_iterator::value_type::begin() const noexcept`
   {
     auto inner = *input_chunked.begin();
-    assert(inner.begin().base() == vector.begin());
+    assert(*inner.begin() == *vector.begin());
     static_assert(noexcept(inner.begin()));
   }
 
@@ -62,7 +62,7 @@ constexpr bool test() {
   // Test `constexpr value_type iterator::operator*() const`
   {
     auto inner = *input_chunked.begin();
-    assert(inner.begin().base() == vector.begin());
+    assert(*inner.begin() == *vector.begin());
   }
 
   return true;
