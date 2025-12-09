@@ -17,7 +17,7 @@
 
 void test() {
   char16_t range[3] = {u'x', u'y', u'z'};
-  auto view = range | std::views::chunk(3);
+  auto view         = range | std::views::chunk(3);
 
   // clang-format off
   (view.begin() == view.end()); // expected-warning {{ignoring return value of function declared with 'nodiscard' attribute}}

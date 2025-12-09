@@ -17,7 +17,7 @@
 
 void test() {
   int range[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-  auto view = range | std::views::chunk(3);
+  auto view    = range | std::views::chunk(3);
 
   // clang-format off
   view.base(); // expected-warning {{ignoring return value of function declared with 'nodiscard' attribute}}

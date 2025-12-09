@@ -17,8 +17,8 @@
 
 void test() {
   long range[2] = {0L, 2L};
-  auto view = range | std::views::chunk(1);
-  
+  auto view     = range | std::views::chunk(1);
+
   // clang-format off
   std::ranges::iter_move(view.begin()); // expected-warning {{ignoring return value of function declared with 'nodiscard' attribute}}
   std::ranges::iter_move(std::as_const(view).begin()); // expected-warning {{ignoring return value of function declared with 'nodiscard' attribute}}
