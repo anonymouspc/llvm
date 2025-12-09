@@ -194,7 +194,7 @@ class chunk_view<_View>::__inner_iterator {
 
   chunk_view* __parent_;
 
-  _LIBCPP_HIDE_FROM_ABI constexpr explicit __inner_iterator(chunk_view& __parent)
+  _LIBCPP_HIDE_FROM_ABI constexpr explicit __inner_iterator(chunk_view& __parent) noexcept
       : __parent_(std::addressof(__parent)) {}
 
 public:

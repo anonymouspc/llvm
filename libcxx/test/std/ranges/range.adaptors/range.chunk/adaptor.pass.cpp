@@ -38,6 +38,7 @@ constexpr bool test() {
 
   // Test `views::chunk(n)(range)`
   {
+    static_assert(noexcept(std::views::chunk(2)));
     auto adaptor = std::views::chunk(3);
     std::same_as<std::ranges::chunk_view<std::ranges::ref_view<std::array<int, 8>>>> decltype(auto) chunked =
         adaptor(view);

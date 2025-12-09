@@ -35,6 +35,7 @@ constexpr bool test() {
 
   // Test `chunk_view.end()` when V models only input_range
   {
+    static_assert(noexcept(input_chunked.end()));
     [[maybe_unused]] std::same_as<std::default_sentinel_t> auto it = input_chunked.end();
   }
 
