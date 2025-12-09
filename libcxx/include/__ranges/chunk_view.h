@@ -140,7 +140,8 @@ public:
 
   _LIBCPP_HIDE_FROM_ABI constexpr void operator++(int) { ++*this; }
 
-  [[nodiscard]] _LIBCPP_HIDE_FROM_ABI friend constexpr bool operator==(const __outer_iterator& __i, default_sentinel_t) {
+  [[nodiscard]] _LIBCPP_HIDE_FROM_ABI friend constexpr bool
+  operator==(const __outer_iterator& __i, default_sentinel_t) {
     return *__i.__parent_->__current_ == ranges::end(__i.__parent_->__base_) && __i.__parent_->__remainder_ != 0;
   }
 
@@ -536,8 +537,8 @@ struct __fn {
   }
 
   template <class _DifferenceType>
-  [[nodiscard]] _LIBCPP_HIDE_FROM_ABI static constexpr auto operator()(_DifferenceType __n)
-      noexcept(is_nothrow_constructible_v<decay_t<_DifferenceType>, _DifferenceType>) {
+  [[nodiscard]] _LIBCPP_HIDE_FROM_ABI static constexpr auto
+  operator()(_DifferenceType __n) noexcept(is_nothrow_constructible_v<decay_t<_DifferenceType>, _DifferenceType>) {
     return __pipeable(std::__bind_back(__fn{}, std::forward<_DifferenceType>(__n)));
   }
 };
