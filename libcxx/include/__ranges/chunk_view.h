@@ -513,9 +513,10 @@ namespace views {
 namespace __chunk {
 struct __fn {
   template <viewable_range _Range>
-  [[nodiscard]] _LIBCPP_HIDE_FROM_ABI static constexpr auto operator()(_Range&& __range, range_difference_t<_Range> __n)
-      noexcept(noexcept(/**/ chunk_view(std::forward<_Range>(__range), std::forward<range_difference_t<_Range>>(__n))))
-          -> decltype(/*--*/ chunk_view(std::forward<_Range>(__range), std::forward<range_difference_t<_Range>>(__n))) {
+  [[nodiscard]] _LIBCPP_HIDE_FROM_ABI static constexpr auto
+  operator()(_Range&& __range, range_difference_t<_Range> __n) noexcept(
+      noexcept(/**/ chunk_view(std::forward<_Range>(__range), std::forward<range_difference_t<_Range>>(__n))))
+      -> decltype(/*--*/ chunk_view(std::forward<_Range>(__range), std::forward<range_difference_t<_Range>>(__n))) {
     return /*-------------*/ chunk_view(std::forward<_Range>(__range), std::forward<range_difference_t<_Range>>(__n));
   }
 
