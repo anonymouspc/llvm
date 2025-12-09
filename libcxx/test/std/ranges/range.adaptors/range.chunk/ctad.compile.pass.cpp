@@ -8,7 +8,10 @@
 
 // REQUIRES: std-at-least-c++23
 
-// std::views::chunk
+// <ranges>
+
+//   template <class R>
+//   chunk_view(R&&, range_difference_t<R>) -> chunk_view<all_t<R>>;
 
 #include <ranges>
 
@@ -30,15 +33,15 @@ struct borrowed_range {
 template <>
 inline constexpr bool std::ranges::enable_borrowed_range<borrowed_range> = true;
 
-void testCTAD() {
+void test_ctad() {
   view v;
   range r;
   borrowed_range br;
 
-  static_assert(std::same_as< decltype(std::ranges::chunk_view(v, 0)), std::ranges::chunk_view<view> >);
-  static_assert(std::same_as< decltype(std::ranges::chunk_view(std::move(v), 0)), std::ranges::chunk_view<view> >);
+  static_assert(std::same_as<decltype(std::ranges::chunk_view(v, 0)), std::ranges::chunk_view<view>>);
+  static_assert(std::same_as<decltype(std::ranges::chunk_view(std::move(v), 0)), std::ranges::chunk_view<view>>);
   static_assert(
-      std::same_as< decltype(std::ranges::chunk_view(r, 0)), std::ranges::chunk_view<std::ranges::ref_view<range>> >);
+      std::same_as< decltype(std::ranges::chunk_view(r, 0)), std::ranges::chunk_view<std::ranges::ref_view<range>>>);
   static_assert(std::same_as<decltype(std::ranges::chunk_view(std::move(r), 0)),
                               std::ranges::chunk_view<std::ranges::owning_view<range>>>);
   static_assert(std::same_as<decltype(std::ranges::chunk_view(br, 0)),

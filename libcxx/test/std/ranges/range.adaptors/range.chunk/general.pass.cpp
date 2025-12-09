@@ -8,12 +8,13 @@
 
 // REQUIRES: std-at-least-c++23
 
-// std::views::chunk
+// <ranges>
 
-#include <ranges>
+//   General tests for chunk_view. This file does not test anything specifically.
 
 #include <algorithm>
 #include <cassert>
+#include <ranges>
 #include <string_view>
 
 #include "test_range.h"
@@ -30,9 +31,9 @@ constexpr bool test() {
             | std::views::lazy_split(' ')
             | std::views::chunk(2)
             | std::views::transform([] (auto&& subview)
-                {
-                  return subview | std::views::join_with(' ');
-                })
+              {
+                return subview | std::views::join_with(' ');
+              })
             | std::views::join_with(' ');
   // clang-format on
   assert(std::ranges::equal(str, str2));

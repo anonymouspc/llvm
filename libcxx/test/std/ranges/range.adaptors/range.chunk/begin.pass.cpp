@@ -8,48 +8,52 @@
 
 // REQUIRES: std-at-least-c++23
 
-// std::views::chunk
+// <ranges>
 
-#include <ranges>
+//   V models only input_range:
+//     constexpr __outer_iterator begin();
+
+//   V models forward_range:
+//     constexpr auto begin() requires (!__simple_view<V>);
+//     constexpr auto begin() const requires forward_range<const V>;
 
 #include <algorithm>
 #include <cassert>
+#include <ranges>
 #include <vector>
 
 #include "test_range.h"
+#include "types.h"
 
 constexpr bool test() {
-  std::vector<int> full_vector  = {1, 1, 1, 2, 2, 2, 3, 3};
-  std::vector<int> empty_vector = {};
+  std::vector<int> vector              = {1, 2, 3, 4, 5, 6, 7, 8};
+  std::span<int>   random_access_view  = {vector.data(), 8};
+  input_span<int>  input_view          = {vector.data(), 8};
 
-  // Test `chunk_view.begin()`
+  // Test `chunk_view.begin()` when V models only input_range
   {
-    auto view = full_vector | std::views::chunk(3);
-    auto it   = view.begin();
-    assert(std::ranges::equal(*it, std::vector{1, 1, 1}));
-    assert(std::ranges::equal(*++it, std::vector{2, 2, 2}));
-    assert(std::ranges::equal(*++it, std::vector{3, 3})); // The last chunk has only 2 elements.
-    assert(++it == view.end());                           // Reaches end.
-
-    view = full_vector | std::views::chunk(5);
-    it   = view.begin();
-    assert(std::ranges::equal(*it, std::vector{1, 1, 1, 2, 2}));
-    assert(std::ranges::equal(*++it, std::vector{2, 3, 3}));
+    auto chunked = input_view | std::views::chunk(3);
+    auto it = chunked.begin();
+    assert(std::ranges::equal(*it,   std::vector{1, 2, 3}));
+    assert(std::ranges::equal(*++it, std::vector{4, 5, 6}));
+    assert(std::ranges::equal(*++it, std::vector{7, 8}));
+    assert(++it == chunked.end());
   }
 
-  // Test `empty_chunk_view.begin()`
+  // Test `chunk_view.begin()` when V models forward_range
   {
-    auto view = empty_vector | std::views::chunk(3);
-    assert(view.size() == 0);
-    assert(view.begin() == view.end());
-  }
-
-  // Test `small_view_with_big_chunk.begin()`
-  {
-    auto view = full_vector | std::views::chunk(314159);
-    assert(view.size() == 1);
-    assert(std::ranges::equal(*view.begin(), full_vector));
-    assert(++view.begin() == view.end());
+    auto chunked = random_access_view | std::views::chunk(3);
+    auto it = chunked.begin();
+    assert(std::ranges::equal(*it,   std::vector{1, 2, 3}));
+    assert(std::ranges::equal(*++it, std::vector{4, 5, 6}));
+    assert(std::ranges::equal(*++it, std::vector{7, 8}));
+    assert(++it == chunked.end());
+    auto const_chunked = std::as_const(random_access_view) | std::views::chunk(3);
+    auto const_it = const_chunked.begin();
+    assert(std::ranges::equal(*const_it,   std::vector{1, 2, 3}));
+    assert(std::ranges::equal(*++const_it, std::vector{4, 5, 6}));
+    assert(std::ranges::equal(*++const_it, std::vector{7, 8}));
+    assert(++it == const_chunked.end());
   }
 
   return true;

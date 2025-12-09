@@ -8,44 +8,51 @@
 
 // REQUIRES: std-at-least-c++23
 
-// std::views::chunk
+// <ranges>
 
-#include <ranges>
+//   V models only input_range:
+//     constexpr default_sentinel_t end();
+
+//   V moduels forward_range:
+//     constexpr auto end() requires (!__simple_view<V>);
+//     constexpr auto end() const requires forward_range<const V>;
+
 
 #include <algorithm>
 #include <cassert>
 #include <concepts>
+#include <iterator>
+#include <ranges>
 #include <vector>
 
 #include "test_range.h"
 #include "types.h"
 
 constexpr bool test() {
-  std::vector vector = {1, 1, 1, 2, 2, 2, 3, 3};
+  std::vector     vector             = {1, 2, 3, 4, 5, 6, 7, 8};
+  std::span<int>  random_access_view = {vector.data(), 8};
+  input_span<int> input_view         = {vector.data(), 8};
 
-  // Test `chunk_view.end()`
+  // Test `chunk_view.end()` when V models only input_range
   {
-    auto view = vector | std::views::chunk(3);
-    auto it   = view.end();
-    assert(std::ranges::equal(*--it, std::vector{3, 3})); // We can adjust the tailing chunk-size.
-    assert(std::ranges::equal(*--it, std::vector{2, 2, 2}));
-    assert(std::ranges::equal(*--it, std::vector{1, 1, 1}));
+    auto chunked = input_view | std::views::chunk(3);
+    [[maybe_unused]] std::same_as<std::default_sentinel_t> auto it = chunked.end();
   }
-
-  // Test `not_sized_chunk_view.end()`
+  
+  // Test `chunk_view.end()` when V models forward_range
   {
-    auto not_sized_vector = not_sized_view(vector | std::views::all);
-    auto view             = not_sized_vector | std::views::chunk(4);
-    static_assert(std::ranges::bidirectional_range<decltype(view)>);
-    static_assert(!std::ranges::sized_range<decltype(view)>);
-    // We cannot handle the tailing chunk without size info, so we forbids one to derement from end().
-    static_assert(std::same_as< decltype(view.end()), std::default_sentinel_t>);
-  }
-
-  // Test `forward_chunk_view.end()`
-  {
-    auto view = vector | std::views::chunk(5);
-    assert(++(++view.begin()) == view.end());
+    auto chunked = random_access_view | std::views::chunk(3);
+    std::random_access_iterator auto it = chunked.end();
+    assert(std::ranges::equal(*--it, std::vector{7, 8})); 
+    assert(std::ranges::equal(*--it, std::vector{4, 5, 6}));
+    assert(std::ranges::equal(*--it, std::vector{1, 2,3 }));
+    assert(it == chunked.begin());
+    auto const_chunked = std::as_const(random_access_view) | std::views::chunk(3);
+    std::random_access_iterator auto const_it = const_chunked.end();
+    assert(std::ranges::equal(*--const_it, std::vector{7, 8}));
+    assert(std::ranges::equal(*--const_it, std::vector{4, 5, 6}));
+    assert(std::ranges::equal(*--const_it, std::vector{1, 2, 3}));
+    assert(const_it == const_chunked.begin());
   }
 
   return true;
