@@ -8,12 +8,23 @@
 
 // REQUIRES: std-at-least-c++23
 
-// std::views::chunk
+// <ranges>
 
-#include <ranges>
+//    friend constexpr bool operator<(const iterator& x, const iterator& y)
+//      requires [random_access_range](https://eel.is/c++draft/range.refinements#concept:random_access_range)<Base>;
+//    friend constexpr bool operator>(const iterator& x, const iterator& y)
+//      requires [random_access_range](https://eel.is/c++draft/range.refinements#concept:random_access_range)<Base>;
+//    friend constexpr bool operator<=(const iterator& x, const iterator& y)
+//      requires [random_access_range](https://eel.is/c++draft/range.refinements#concept:random_access_range)<Base>;
+//    friend constexpr bool operator>=(const iterator& x, const iterator& y)
+//      requires [random_access_range](https://eel.is/c++draft/range.refinements#concept:random_access_range)<Base>;
+//    friend constexpr auto operator<=>(const iterator& x, const iterator& y)
+//      requires [random_access_range](https://eel.is/c++draft/range.refinements#concept:random_access_range)<Base> &&
+ //              [three_way_comparable](https://eel.is/c++draft/cmp.concept#concept:three_way_comparable)<iterator_t<Base>>;
 
 #include <algorithm>
 #include <cassert>
+#include <ranges>
 #include <vector>
 
 #include "test_range.h"
