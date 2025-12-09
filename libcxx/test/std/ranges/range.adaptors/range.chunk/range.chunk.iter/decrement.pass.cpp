@@ -17,7 +17,6 @@
 //   constexpr iterator& operator-=(difference_type)
 //     requires random_access_range<Base>;
 
-
 #include <algorithm>
 #include <cassert>
 #include <ranges>
@@ -27,8 +26,7 @@
 
 constexpr bool test() {
   std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8};
-  auto             chunked = vector | std::views::chunk(2);
-  
+  auto chunked            = vector | std::views::chunk(2);
 
   // Test `constexpr iterator& operator--();`
   {

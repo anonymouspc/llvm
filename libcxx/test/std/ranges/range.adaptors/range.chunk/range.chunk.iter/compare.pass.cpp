@@ -32,8 +32,8 @@
 #include "test_range.h"
 
 constexpr bool test() {
-  std::vector<int> vector  = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-  auto             chunked = vector | std::views::chunk(3);
+  std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+  auto chunked            = vector | std::views::chunk(3);
 
   // Test `friend constexpr bool operator==(const iterator& x, const iterator& y)`
   {
