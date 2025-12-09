@@ -21,6 +21,6 @@ void test() {
 
   // clang-format off
   view.end(); // expected-warning {{ignoring return value of function declared with 'nodiscard' attribute}}
-  td::as_const(view).end(); // expected-warning {{ignoring return value of function declared with 'nodiscard' attribute}}
+  std::as_const(view).end(); // expected-warning {{ignoring return value of function declared with 'nodiscard' attribute}}
   // clang-format on
 }

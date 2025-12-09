@@ -15,41 +15,36 @@
 #include <algorithm>
 #include <cassert>
 #include <concepts>
-#include <forward_list>
-#include <list>
+#include <vector>
 
 #include "test_range.h"
 #include "types.h"
 
 constexpr bool test() {
-  std::list list                 = {1, 1, 1, 2, 2, 2, 3, 3};
-  std::forward_list forward_list = {1, 1, 1, 2, 2, 2, 3, 3};
+  std::vector vector = {1, 1, 1, 2, 2, 2, 3, 3};
 
   // Test `chunk_view.end()`
   {
-    auto view = list | std::views::chunk(3);
+    auto view = vector | std::views::chunk(3);
     auto it   = view.end();
-    assert(std::ranges::equal(*--it, std::list{3, 3})); // We can adjust the tailing chunk-size.
-    assert(std::ranges::equal(*--it, std::list{2, 2, 2}));
-    assert(std::ranges::equal(*--it, std::list{1, 1, 1}));
+    assert(std::ranges::equal(*--it, std::vector{3, 3})); // We can adjust the tailing chunk-size.
+    assert(std::ranges::equal(*--it, std::vector{2, 2, 2}));
+    assert(std::ranges::equal(*--it, std::vector{1, 1, 1}));
   }
 
   // Test `not_sized_chunk_view.end()`
   {
-    auto not_sized_list = not_sized_view(list | std::views::all);
-    auto view           = not_sized_list | std::views::chunk(4);
+    auto not_sized_vector = not_sized_view(vector | std::views::all);
+    auto view             = not_sized_vector | std::views::chunk(4);
     static_assert(std::ranges::bidirectional_range<decltype(view)>);
     static_assert(!std::ranges::sized_range<decltype(view)>);
-    static_assert(
-        std::same_as<
-            decltype(view.end()),
-            std::
-                default_sentinel_t>); // We cannot handle the tailing chunk without size info, so we forbids one to derement from end().
+    // We cannot handle the tailing chunk without size info, so we forbids one to derement from end().
+    static_assert(std::same_as< decltype(view.end()), std::default_sentinel_t>);
   }
 
   // Test `forward_chunk_view.end()`
   {
-    auto view = list | std::views::chunk(5);
+    auto view = vector | std::views::chunk(5);
     assert(++(++view.begin()) == view.end());
   }
 
