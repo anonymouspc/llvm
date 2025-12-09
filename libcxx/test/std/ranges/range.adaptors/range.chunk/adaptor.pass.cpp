@@ -27,8 +27,7 @@ constexpr bool test() {
 
   // Test `views::chunk(view, n)`
   {
-    auto chunked = std::views::chunk(span, 2);
-    static_assert(std::same_as<decltype(chunked), std::ranges::chunk_view<std::span<int>>>);
+    std::same_as<std::ranges::chunk_view<std::span<int>>>> decltype(auto) chunked = std::views::chunk(span, 2);
     assert(std::ranges::equal(*chunked.begin(), std::array{1, 1}));
   }
 
