@@ -26,9 +26,9 @@
 #include "types.h"
 
 constexpr bool test() {
-  std::vector<int> vector           = {1, 2, 3, 4, 5, 6, 7, 8};
-  std::span<int> random_access_view = {vector.data(), 8};
-  input_span<int> input_view        = {vector.data(), 8};
+  std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8};
+  auto random_access_view = vector | std::views::all;
+  auto input_view         = input_span<int>{vector.data(), 8};
 
   // Test `chunk_view.begin()` when V models only input_range
   {

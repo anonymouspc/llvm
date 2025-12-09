@@ -28,13 +28,13 @@
 #include "types.h"
 
 constexpr bool test() {
-  std::vector vector                = {1, 2, 3, 4, 5, 6, 7, 8};
-  std::span<int> random_access_view = {vector.data(), 8};
-  input_span<int> input_view        = {vector.data(), 8};
+  std::vector vector      = {1, 2, 3, 4, 5, 6, 7, 8};
+  auto random_access_view = vector | std::views::all;
+  auto input_view = input_span<int>{vector.data(), 8};
 
   // Test `chunk_view.end()` when V models only input_range
   {
-    auto chunked                                                   = input_view | std::views::chunk(3);
+    auto chunked = input_view | std::views::chunk(3);
     [[maybe_unused]] std::same_as<std::default_sentinel_t> auto it = chunked.end();
   }
 
