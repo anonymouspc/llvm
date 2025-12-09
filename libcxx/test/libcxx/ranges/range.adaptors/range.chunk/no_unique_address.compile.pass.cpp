@@ -15,7 +15,6 @@
 // This test ensures that we use `[[no_unique_address]]` in `chunk_view`.
 
 #include <cstddef>
-#include <iostream>
 #include <ranges>
 #include <string>
 #include <type_traits>
@@ -45,7 +44,9 @@ using CV1 = std::ranges::chunk_view<input_view>;
 // [[no_unique_address]] range_difference_t<_View> __n_                        // offset: sizeof(std::ptrdiff_t)
 // [[no_unique_address]] range_difference_t<_View> __remainder_                // offset: sizeof(std::ptrdiff_t)
 // [[no_unique_address]] __non_propagating_cache<iterator_t<_View>> __current_ // offset: ?
-// TODO: how to test this ?
+// TODO: hmmm I'm a new C++ learner (having been exposed to C++ 2 years) 
+//       and I do not know about the memory layout here too...
+//       What is the layout like?
 
 using CV2 = std::ranges::chunk_view<forward_view>;
 // Expected CV2 (with View >= forward) layout:
