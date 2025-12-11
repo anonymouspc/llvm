@@ -43,12 +43,12 @@
 
 constexpr bool test() {
   std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-  auto chunked            = vector | std::views::chunk(3);
-  auto input_chunked      = input_span<int>(vector) | std::views::chunk(3);
+  std::ranges::chunk_view<std::ranges::ref_view<std::vector<int>>> chunked = vector | std::views::chunk(3);
+  std::ranges::chunk_view<input_span<int>> input_chunked = input_span<int>(vector) | std::views::chunk(3);
 
   // Test `friend constexpr bool opreator==(const outer_iterator& x, default_sentinel_t)`
   {
-    auto it = input_chunked.begin();
+    /*chunk_view::__outer_iterator*/ std::input_iterator auto it = input_chunked.begin();
     std::ranges::advance(it, 4);
     assert(it == std::default_sentinel);
   }

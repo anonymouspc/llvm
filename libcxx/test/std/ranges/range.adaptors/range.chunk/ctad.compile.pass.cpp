@@ -38,14 +38,18 @@ void test_ctad() {
   range r;
   borrowed_range br;
 
-  static_assert(std::same_as<decltype(std::ranges::chunk_view(v, 0)), std::ranges::chunk_view<view>>);
-  static_assert(std::same_as<decltype(std::ranges::chunk_view(std::move(v), 0)), std::ranges::chunk_view<view>>);
-  static_assert(
-      std::same_as< decltype(std::ranges::chunk_view(r, 0)), std::ranges::chunk_view<std::ranges::ref_view<range>>>);
+  // clang-format off
+  static_assert(std::same_as<decltype(std::ranges::chunk_view(v, 0)), 
+                                      std::ranges::chunk_view<view>>);
+  static_assert(std::same_as<decltype(std::ranges::chunk_view(std::move(v), 0)), 
+                                      std::ranges::chunk_view<view>>);
+  static_assert(std::same_as<decltype(std::ranges::chunk_view(r, 0)), 
+                                      std::ranges::chunk_view<std::ranges::ref_view<range>>>);
   static_assert(std::same_as<decltype(std::ranges::chunk_view(std::move(r), 0)),
-                             std::ranges::chunk_view<std::ranges::owning_view<range>>>);
+                                      std::ranges::chunk_view<std::ranges::owning_view<range>>>);
   static_assert(std::same_as<decltype(std::ranges::chunk_view(br, 0)),
-                             std::ranges::chunk_view<std::ranges::ref_view<borrowed_range>>>);
+                                      std::ranges::chunk_view<std::ranges::ref_view<borrowed_range>>>);
   static_assert(std::same_as<decltype(std::ranges::chunk_view(std::move(br), 0)),
-                             std::ranges::chunk_view<std::ranges::owning_view<borrowed_range>>>);
+                                      std::ranges::chunk_view<std::ranges::owning_view<borrowed_range>>>);
+  // clang-format on
 }

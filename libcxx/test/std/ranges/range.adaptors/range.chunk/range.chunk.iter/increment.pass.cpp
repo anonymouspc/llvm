@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iterator>
 #include <ranges>
 #include <vector>
 
@@ -32,18 +33,18 @@
 
 constexpr bool test() {
   std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8};
-  auto chunked            = vector | std::views::chunk(2);
-  auto input_chunked      = input_span<int>(vector) | std::views::chunk(2);
+  std::ranges::chunk_view<std::ranges::ref_view<std::vector<int>>> chunked            = vector | std::views::chunk(2);
+  std::ranges::chunk_view<input_span<int>> input_chunked = input_span<int>(vector) | std::views::chunk(2);
 
   // Test `constexpr outer_iterator& operator++();`
   {
-    auto it = input_chunked.begin();
+    /*chunk_view::__outer_iterator*/ std::input_iterator auto it = input_chunked.begin();
     assert(std::ranges::equal(*++it, std::vector{3, 4}));
   }
 
   // Test `constexpr void operator++(int);`
   {
-    auto it = input_chunked.begin();
+    /*chunk_view::__outer_iterator*/ std::input_iterator auto it = input_chunked.begin();
     static_assert(std::same_as<decltype(it++), void>);
     it++;
     assert(std::ranges::equal(*it, std::vector{3, 4}));
@@ -51,13 +52,13 @@ constexpr bool test() {
 
   // Test `constexpr inner_iterator& operator++();`
   {
-    auto it = (*input_chunked.begin()).begin();
+    /*chunk_view::__inner_iterator*/ std::input_iterator auto it = (*input_chunked.begin()).begin();
     assert(*++it == 2);
   }
 
   // Test `constexpr inner_iterator& operator++();`
   {
-    auto it = (*input_chunked.begin()).begin();
+    /*chunk_view::__inner_iterator*/ std::input_iterator auto it = (*input_chunked.begin()).begin();
     static_assert(std::same_as<decltype(it++), void>);
     it++;
     assert(*it == 2);
@@ -65,20 +66,20 @@ constexpr bool test() {
 
   // Test `constexpr iterator& operator++();`
   {
-    auto it = chunked.begin();
+    /*chunk_view::__iterator*/ std::forward_iterator auto it = chunked.begin();
     assert(std::ranges::equal(*++it, std::vector{3, 4}));
   }
 
   // Test `constexpr iterator operator++(int)`
   {
-    auto it = chunked.begin();
+    /*chunk_view::__iterator*/ std::forward_iterator auto it = chunked.begin();
     it++;
     assert(std::ranges::equal(*it, std::vector{3, 4}));
   }
 
   // Test `constexpr iterator& operator+=(difference_type)`
   {
-    auto it = chunked.begin();
+    /*chunk_view::__iterator*/ std::random_access_iterator auto it = chunked.begin();
     it += 3;
     assert(std::ranges::equal(*it, std::vector{7, 8}));
   }

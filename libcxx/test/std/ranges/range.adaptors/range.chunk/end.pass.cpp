@@ -29,9 +29,9 @@
 
 constexpr bool test() {
   std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8};
-  auto chunked            = vector | std::views::chunk(3);
-  auto const_chunked      = std::as_const(vector) | std::views::chunk(3);
-  auto input_chunked      = input_span<int>(vector.data(), 8) | std::views::chunk(3);
+  std::ranges::chunk_view<std::ranges::ref_view<std::vector<int>>> chunked = vector | std::views::chunk(3);
+  std::ranges::chunk_view<std::ranges::ref_view<const std::vector<int>>> const_chunked      = std::as_const(vector) | std::views::chunk(3);
+  std::ranges::chunk_view<input_span<int>> input_chunked = input_span<int>(vector.data(), 8) | std::views::chunk(3);
 
   // Test `chunk_view.end()` when V models only input_range
   {
@@ -41,12 +41,12 @@ constexpr bool test() {
 
   // Test `chunk_view.end()` when V models forward_range
   {
-    std::random_access_iterator auto it = chunked.end();
+    /*chunk_view::__iterator<false>*/ std::forward_iterator auto it = chunked.end();
     assert(std::ranges::equal(*--it, std::vector{7, 8}));
     assert(std::ranges::equal(*--it, std::vector{4, 5, 6}));
     assert(std::ranges::equal(*--it, std::vector{1, 2, 3}));
     assert(it == chunked.begin());
-    std::random_access_iterator auto const_it = const_chunked.end();
+    /*chunk_view::__iterator<true>*/ std::forward_iterator auto const_it = const_chunked.end();
     assert(std::ranges::equal(*--const_it, std::vector{7, 8}));
     assert(std::ranges::equal(*--const_it, std::vector{4, 5, 6}));
     assert(std::ranges::equal(*--const_it, std::vector{1, 2, 3}));

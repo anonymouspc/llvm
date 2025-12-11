@@ -20,7 +20,7 @@
 #include "test_range.h"
 
 constexpr bool test() {
-  auto str = std::string_view("Cheese the chicken chunk by chunk on truck by truck");
+  std::string_view str = "Cheese with chicken chunk by chunk on truck with my trick";
   // clang-format off
   auto str2 = str 
             | std::views::chunk(4)
