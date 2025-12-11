@@ -8,8 +8,6 @@
 
 // REQUIRES: std-at-least-c++23
 
-// XFAIL: msvc
-
 // <ranges>
 
 // This test ensures that we use `[[no_unique_address]]` in `chunk_view`.
@@ -44,6 +42,7 @@ using CV1 = std::ranges::chunk_view<input_view>;
 // [[no_unique_address]] range_difference_t<_View> __n_                        // size: sizeof(ptrdiff_t)
 // [[no_unique_address]] range_difference_t<_View> __remainder_                // size: sizeof(ptrdiff_t)
 // [[no_unique_address]] __non_propagating_cache<iterator_t<_View>> __current_ // size: sizeof(__non_propagating_cache<cpp20_input_iterator<int*>>), align: std::ptrdiff_t
+static_assert(alignof(std::ranges::__non_propagating_cache<cpp20_input_iterator<int*>>) == alignof(std::ptrdiff_t));
 static_assert(sizeof(CV1) == /*sizeof(__base_) == 0 + */ sizeof(std::ptrdiff_t) * 2 +
                                  sizeof(std::ranges::__non_propagating_cache<cpp20_input_iterator<int*>>));
 
