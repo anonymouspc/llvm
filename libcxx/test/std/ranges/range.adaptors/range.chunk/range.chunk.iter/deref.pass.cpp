@@ -30,7 +30,7 @@
 #include "../types.h"
 
 constexpr bool test() {
-  std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+  std::vector<int> vector                                                  = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
   std::ranges::chunk_view<std::ranges::ref_view<std::vector<int>>> chunked = vector | std::views::chunk(3);
   std::ranges::chunk_view<input_span<int>> input_chunked = input_span<int>(vector) | std::views::chunk(3);
 
@@ -49,7 +49,7 @@ constexpr bool test() {
   // Test `constexpr default_sentinel_t outer_iterator::value_type::end() const noexcept`
   {
     /*chunk_view::__outer_iterator::value_type*/ std::ranges::input_range auto inner = *input_chunked.begin();
-    [[maybe_unused]] std::same_as<std::default_sentinel_t> auto it = inner.end();
+    [[maybe_unused]] std::same_as<std::default_sentinel_t> auto it                   = inner.end();
     static_assert(noexcept((inner.end())));
   }
 
