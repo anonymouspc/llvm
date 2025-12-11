@@ -22,9 +22,10 @@
 #include "test_range.h"
 
 constexpr bool test() {
-  std::array<int,8> array   = {1, 2, 3, 4, 5, 6, 7, 8};
-  std::ranges::chunk_view<std::ranges::ref_view<std::array<int,8>>> chunked = array | std::views::chunk(3);
-  std::ranges::chunk_view<std::ranges::ref_view<const std::array<int,8>>> const_chunked = std::as_const(array) | std::views::chunk(4);
+  std::array<int, 8> array                                                   = {1, 2, 3, 4, 5, 6, 7, 8};
+  std::ranges::chunk_view<std::ranges::ref_view<std::array<int, 8>>> chunked = array | std::views::chunk(3);
+  std::ranges::chunk_view<std::ranges::ref_view<const std::array<int, 8>>> const_chunked =
+      std::as_const(array) | std::views::chunk(4);
 
   // Test `chunk_view.base()`
   {

@@ -27,7 +27,7 @@
 
 constexpr bool test() {
   std::vector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8};
-  std::ranges::chunk_view<std::ranges::ref_view<std::vector<int>>> chunked            = vector | std::views::chunk(2);
+  std::ranges::chunk_view<std::ranges::ref_view<std::vector<int>>> chunked = vector | std::views::chunk(2);
 
   // Test `constexpr iterator& operator--();`
   {

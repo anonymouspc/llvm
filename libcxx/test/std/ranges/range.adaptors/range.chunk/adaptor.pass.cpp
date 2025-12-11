@@ -23,8 +23,8 @@
 #include "types.h"
 
 constexpr bool test() {
-  std::array<int,8> array = {1, 2, 3, 4, 5, 6, 7, 8};
-  std::ranges::ref_view<std::array<int,8>> view = array | std::views::all;
+  std::array<int, 8> array                       = {1, 2, 3, 4, 5, 6, 7, 8};
+  std::ranges::ref_view<std::array<int, 8>> view = array | std::views::all;
 
   // Test `views::chunk(view, n)`
   {
@@ -60,7 +60,7 @@ constexpr bool test() {
 
   // Test `views::chunk | adaptor`
   {
-    /*__pipable*/ auto adaptors = std::views::chunk(5) | std::views::join;
+    /*__pipable*/ auto adaptors            = std::views::chunk(5) | std::views::join;
     std::ranges::input_range auto rejoined = view | adaptors;
     assert(std::ranges::equal(rejoined, view));
     std::ranges::input_range auto const_rejoined = std::as_const(view) | adaptors;
